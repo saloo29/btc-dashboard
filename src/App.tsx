@@ -2,7 +2,7 @@ function App() {
   
 
   return (
-    <div className="text-green-500">
+    <div className="text-4xl text-green-500 font-bold">
         BTC/UTSC Dashboard
     </div>
   )
