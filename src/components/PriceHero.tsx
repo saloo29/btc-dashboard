@@ -41,14 +41,11 @@ const PriceHero = ({ ticker } :  Props) => {
             )}
           </div>
         </div>
-        
           <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
             Mark Price: <span className="text-btc font-bold text-lg">
               {hasMarkPrice ? '$' + markPrice.toLocaleString() : '—'}
             </span>
           </p>
-          
-          
       </div>
     </>
   );
