@@ -1,14 +1,18 @@
 import type { BtcTickerType } from "../types/ticker";
 import { useEffect, useState } from 'react';
 
+export type WebscoketStatus = 'connecting' | 'connected' | 'disconnected';
+
 const useBitbyTickerWs = () => {
   const [ticker, setTicker] = useState<BtcTickerType | null>(null);
+  const [status, setStatus] = useState<WebscoketStatus>('connecting')
 
   useEffect(() => {
     const socket = new WebSocket("wss://stream.bybit.com/v5/public/linear");
 
     socket.onopen = () => {
       console.log("Connected to ByBit WebSocket");
+      setStatus('connected');
 
       socket.send(
         JSON.stringify({
@@ -33,16 +37,21 @@ const useBitbyTickerWs = () => {
 
     socket.onerror = (error) => {
       console.log("error is ", error);
+
+      setStatus('disconnected');
+
     };
 
     socket.onclose = () => {
       console.log("websocket closed.")
+
+      setStatus('disconnected');
     };
 
     return () => socket.close();
   }, []);
 
-  return { ticker };
+  return { ticker, status };
 }
 
 export default useBitbyTickerWs;

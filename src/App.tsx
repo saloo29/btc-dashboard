@@ -6,14 +6,14 @@ import TradingViewChart from "./components/TradingViewChart";
 import useTheme from "./hooks/useTheme";
 
 function App() {
-  const { ticker } = useBitbyTickerWs();
+  const { ticker, status } = useBitbyTickerWs();
   const { theme, toggleTheme } = useTheme();
 
   console.log(ticker);
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
-      <Header toggleTheme={toggleTheme} theme={theme} />
+      <Header toggleTheme={toggleTheme} theme={theme} status={status}/>
       <PriceHero ticker = {ticker} />
       <StatsCard />
       <TradingViewChart />
