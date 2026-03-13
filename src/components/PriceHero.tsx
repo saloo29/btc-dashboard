@@ -1,10 +1,12 @@
 import type { BtcTickerType } from "../types/ticker";
+import Sparkline from "./SparkLine";
 
 type Props = {
   ticker: BtcTickerType | null;
+  sparkData: number[];
 }
 
-const PriceHero = ({ ticker } :  Props) => {
+const PriceHero = ({ ticker, sparkData } :  Props) => {
 
   const lastPrice = parseFloat(ticker?.lastPrice ?? "0");
   const markPrice = parseFloat(ticker ?.markPrice ?? "0");
@@ -22,7 +24,8 @@ const PriceHero = ({ ticker } :  Props) => {
         rounded-2xl border border-zinc-200 dark:border-zinc-700
         bg-white dark:bg-zinc-800
         backdrop-blur-sm p-7
-        mb-4 flex flex-col gap-3
+        mb-4 flex gap-3
+        justify-between items-center
       ">
         <div>
           <p className="text-xs tracking-[0.2em] uppercase text-zinc-500 dark:text-zinc-400 mb-2 font-mono">
@@ -41,11 +44,20 @@ const PriceHero = ({ ticker } :  Props) => {
             )}
           </div>
         </div>
+
+          
+
+        <div className="w-40 h-12 opacity-70">
+          <Sparkline data={sparkData}/>
+        </div>
+
+        <div>
           <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
             Mark Price: <span className="text-btc font-bold text-lg">
               {hasMarkPrice ? '$' + markPrice.toLocaleString() : '—'}
             </span>
           </p>
+        </div>
       </div>
     </>
   );

@@ -5,7 +5,8 @@ export type WebscoketStatus = 'connecting' | 'connected' | 'disconnected';
 
 const useBitbyTickerWs = () => {
   const [ticker, setTicker] = useState<BtcTickerType | null>(null);
-  const [status, setStatus] = useState<WebscoketStatus>('connecting')
+  const [status, setStatus] = useState<WebscoketStatus>('connecting');
+  const [sparkData, setSparkData] = useState<number[]>([]);
 
   useEffect(() => {
     const socket = new WebSocket("wss://stream.bybit.com/v5/public/linear");
@@ -28,10 +29,18 @@ const useBitbyTickerWs = () => {
       if(msg.topic === "tickers.BTCUSDT") {
         const newFields = msg.data;
 
+        const price = parseFloat(newFields.lastPrice ?? "0");
+
         setTicker((prev) => ({
           ...prev,
           ...newFields,
         }));
+
+        setSparkData(prev => {
+          if(isNaN(price) || price === 0) return prev;
+          const next = [...prev, price];
+          return next.length > 60 ? next.slice(-60) : next;
+        });
       };
     };
 
@@ -51,7 +60,7 @@ const useBitbyTickerWs = () => {
     return () => socket.close();
   }, []);
 
-  return { ticker, status };
+  return { ticker, status, sparkData };
 }
 
 export default useBitbyTickerWs;
